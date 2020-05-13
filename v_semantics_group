@@ -1,0 +1,40 @@
+CREATE VIEW `seowork.inventive_views.v_semantics_group` AS
+
+WITH adapter AS (
+    SELECT *, ROW_NUMBER()
+    OVER(PARTITION BY date, project_id, search_engine, group_id ORDER BY created_at DESC) as state
+    FROM `seowork.inventive_source.semantics_group`
+)
+SELECT
+    project_id,
+    project_name,
+    project_description,
+    date,
+    search_engine,
+    region_id,
+    region_name,
+    is_mobile,
+    queries_groups_count, 
+    queries_count, 
+    documents_count, 
+    group_id, 
+    group_name,
+    frequency1,
+    frequency2,
+    frequency3,
+    top3_count, 
+    top5_count, 
+    top10_count, 
+    top100_count, 
+    top3_percent, 
+    top5_percent, 
+    top10_percent, 
+    top100_percent, 
+    frequency1_top10_percent, 
+    frequency2_top10_percent, 
+    frequency1_top10_count, 
+    potential_traffic, 
+    potential_traffic_percent
+FROM adapter
+WHERE state = 1
+ORDER BY date DESC, project_id, search_engine;

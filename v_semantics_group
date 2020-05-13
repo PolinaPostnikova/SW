@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS `seowork.inventive_views.v_semantics_group`;
+
 CREATE VIEW `seowork.inventive_views.v_semantics_group` AS
 
 WITH adapter AS (

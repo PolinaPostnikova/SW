@@ -1,11 +1,12 @@
-DROP VIEW IF EXISTS `seowork.inventive_views.v_semantics_category`;
 
-CREATE VIEW `seowork.inventive_views.v_semantics_category` AS
+DROP VIEW IF EXISTS `meloman-seowork.meloman_views.v_semantics_category`;
+
+CREATE VIEW `meloman-seowork.meloman_views.v_semantics_category` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine, category_id ORDER BY created_at DESC) as state
-    FROM `seowork.inventive_source.semantics_category`
+    FROM `seowork.meloman_source.semantics_category`
 )
 SELECT
     project_id,

@@ -1,6 +1,6 @@
-DROP VIEW IF EXISTS `meloman-seowork.meloman_views.competitors_dashboard`;
+DROP VIEW IF EXISTS `meloman-seowork.meloman_views.v_competitors_dashboard`;
 
-CREATE VIEW `meloman-seowork.meloman_views.competitors_dashboard` AS
+CREATE VIEW `meloman-seowork.meloman_views.v_competitors_dashboard` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()

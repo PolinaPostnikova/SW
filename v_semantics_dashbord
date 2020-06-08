@@ -1,5 +1,3 @@
-seowork.meloman_source
-
 DROP VIEW IF EXISTS `meloman-seowork.meloman_views.v_semantics_dashboard`;
 
 CREATE VIEW `meloman-seowork.meloman_views.v_semantics_dashboard` AS

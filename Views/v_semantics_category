@@ -1,12 +1,11 @@
+DROP VIEW IF EXISTS `seowork.okko_views.v_semantics_category`;
 
-DROP VIEW IF EXISTS `meloman-seowork.meloman_views.v_semantics_category`;
-
-CREATE VIEW `meloman-seowork.meloman_views.v_semantics_category` AS
+CREATE VIEW `seowork.okko_views.v_semantics_category` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine, category_id ORDER BY created_at DESC) as state
-    FROM `seowork.meloman_source.semantics_category`
+    FROM `seowork.okko_source.semantics_category`
 )
 SELECT
     project_id,
@@ -23,6 +22,7 @@ SELECT
     documents_count, 
     category_id, 
     category_name,
+    avg_position,
     frequency1,
     frequency2,
     frequency3,

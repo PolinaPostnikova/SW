@@ -1,11 +1,11 @@
-DROP VIEW IF EXISTS `meloman-seowork.meloman_views.v_semantics_dashboard`;
+DROP VIEW IF EXISTS `seowork-281509.bartiko_views.v_semantics_dashboard`;
 
-CREATE VIEW `meloman-seowork.meloman_views.v_semantics_dashboard` AS
+CREATE VIEW `seowork-281509.bartiko_views.v_semantics_dashboard` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine ORDER BY created_at DESC) as state
-    FROM `seowork.meloman_source.semantics_dashboard`
+    FROM `seowork.bartiko_source.semantics_dashboard`
 )
 SELECT
     project_id,
@@ -21,6 +21,7 @@ SELECT
     queries_count, 
     documents_count, 
     categories_count,
+    avg_position,
     frequency1,
     frequency2,
     frequency3,

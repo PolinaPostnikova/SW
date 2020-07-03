@@ -1,11 +1,11 @@
-DROP VIEW IF EXISTS `seowork.inventive_views.v_semantics_group`;
+DROP VIEW IF EXISTS `seowork.svyaznoy_views.v_semantics_group`;
 
-CREATE VIEW `seowork.inventive_views.v_semantics_group` AS
+CREATE VIEW `seowork.svyaznoy_views.v_semantics_group` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine, group_id ORDER BY created_at DESC) as state
-    FROM `seowork.inventive_source.semantics_group`
+    FROM `seowork.svyaznoy_source.semantics_group`
 )
 SELECT
     project_id,
@@ -21,6 +21,7 @@ SELECT
     documents_count, 
     group_id, 
     group_name,
+    avg_position,
     frequency1,
     frequency2,
     frequency3,

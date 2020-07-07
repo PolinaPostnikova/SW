@@ -1,0 +1,43 @@
+-- NOT FINISHED
+
+DROP VIEW IF EXISTS `ozontest.Client_6.vc_position_by_queries`;
+
+CREATE VIEW `ozontest.Client_6.vc_position_by_queries` AS
+
+SELECT
+
+pp.project_id,
+pp.project_name,
+pp.project_description,
+pp.project_url,
+pp.host_id,
+pp.host_name,
+pp.region_id,
+pp.region_name,
+pp.position_search_engine,
+pp.position_is_mobile,
+pp.position_queries_count,
+
+pq.id as entity_id,
+pq.name,
+pq.cost,
+pq.frequency1 as query_frequency1,
+pq.frequency2 as query_frequency2,
+pq.frequency3 as query_frequency3,
+
+pd.position_project_id,
+pd.date,
+pd.query_id,
+pd.position,
+pd.is_zero,
+pd.url,
+pd.frequency1,
+pd.frequency2,
+pd.frequency3
+
+FROM `ozontest.Client_6.v_position_data` as pd
+LEFT JOIN `ozontest.Client_6.v_position_queries` as pq USING (position_project_id, query_id)
+LEFT JOIN `ozontest.Client_6.v_position_projects` as pp USING (position_project_id)
+
+-- WHERE pq.is_active = true
+-- AND pp.project_is_active = true AND pp.position_is_active = true

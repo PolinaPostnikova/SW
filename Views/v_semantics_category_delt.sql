@@ -9,8 +9,8 @@ WITH adapter AS (
 ),
 delta_adapter AS (
   SELECT *,
-    avg_position - LAG(avg_position) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) as avg_position_diff,
-    round((avg_position - LAG(avg_position) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) / LAG(avg_position) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) * 100) as avg_position_diff_percent
+    LAG(avg_position) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - avg_position as avg_position_diff,
+    round((LAG(avg_position) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - avg_position) / avg_position * 100) as avg_position_diff_percent
   FROM adapter
   WHERE state = 1
 )

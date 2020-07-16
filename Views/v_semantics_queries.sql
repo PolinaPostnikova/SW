@@ -10,7 +10,7 @@ WITH adapter AS (
 SELECT
     project_id,
     project_name,
-    project_description,
+    IF((project_description = '') IS NOT FALSE, project_name, project_description) as project_description,
     date,
     search_engine,
     region_id,

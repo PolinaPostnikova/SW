@@ -1,0 +1,50 @@
+DROP VIEW IF EXISTS `vseinstrumenti-seowork.vseinstrumenti_seowork_views.vc_queries_ptraf`;
+
+CREATE VIEW `vseinstrumenti-seowork.vseinstrumenti_seowork_views.vc_queries_ptraf` AS
+
+SELECT
+
+vc.project_id, 
+vc.project_name, 
+vc.project_description, 
+vc.project_url, 
+vc.host_id,
+vc.host_name, 
+vc.region_id, 
+vc.region_name, 
+vc.position_search_engine, 
+vc.position_is_mobile, 
+vc.position_queries_count, 
+vc.entity_id, 
+vc.name, 
+vc.cost, 
+vc.query_frequency1, 
+vc.query_frequency2, 
+vc.query_frequency3, 
+vc.query_id, 
+vc.position, 
+vc.is_zero, 
+vc.url, 
+vc.potential_traffic_query, 
+vc.frequency1, 
+vc.frequency2, 
+vc.frequency3,
+
+ad.position_project_id,
+ad.date,
+ad.potential_traffic_project,
+ROUND(ad.potential_traffic_project / ad.potential_traffic_project_max * 100, 2) as potential_traffic_percent
+
+FROM
+(
+    SELECT
+    position_project_id,
+    date,
+    ROUND(SUM(potential_traffic_query), 2) as potential_traffic_project,
+    SUM(query_frequency2) * 0.1 as potential_traffic_project_max
+
+    FROM `vseinstrumenti-seowork.vseinstrumenti_seowork_views.vc_position_by_queries` 
+    GROUP BY position_project_id, date) AS ad
+
+
+RIGHT JOIN `vseinstrumenti-seowork.vseinstrumenti_seowork_views.vc_position_by_queries` as vc USING (position_project_id, date)

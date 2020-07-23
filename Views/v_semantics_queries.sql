@@ -1,11 +1,11 @@
-DROP VIEW IF EXISTS `raiffeisen-owox.SEO_Ashmanov.v_semantics_queries`;
+DROP VIEW IF EXISTS `seowork.eldorado_views.v_semantics_queries`;
 
-CREATE VIEW `raiffeisen-owox.SEO_Ashmanov.v_semantics_queries` AS
+CREATE VIEW `seowork.eldorado_views.v_semantics_queries` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine, query_id ORDER BY created_at DESC) as state
-    FROM `raiffeisen-owox.SEO_Ashmanov.semantics_queries`
+    FROM `seowork.eldorado_source.semantics_queries`
 )
 SELECT
     project_id,
@@ -22,6 +22,8 @@ SELECT
     document_name,
     real_document,
     rel_document,
+    category_id,
+    category_name,
     avg_position,
     frequency1,
     frequency2,

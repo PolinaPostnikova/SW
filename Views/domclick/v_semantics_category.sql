@@ -11,7 +11,7 @@ SELECT
     project_id,
     project_name,
     project_description, 
-    REGEXP_REPLACE (project_description, 'domclick.ru*', '') as project_description_new,
+    REGEXP_REPLACE (competitor, '(.*\\.)?(\\w+\\.\\w+)', '\\2') as competitor_new,
     date,
     search_engine,
     region_id,

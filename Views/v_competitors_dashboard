@@ -1,16 +1,16 @@
-DROP VIEW IF EXISTS `meloman-seowork.meloman_views.v_competitors_dashboard`;
+DROP VIEW IF EXISTS `sokolov-285710.sokolov_views.v_competitors_dashboard`;
 
-CREATE VIEW `meloman-seowork.meloman_views.v_competitors_dashboard` AS
+CREATE VIEW `sokolov-285710.sokolov_views.v_competitors_dashboard` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine, competitor ORDER BY created_at DESC) as state
-    FROM `seowork.meloman_source.competitors_dashboard`
+    FROM `seowork.sokolov_source.competitors_dashboard`
 )
 SELECT
     project_id,
     project_name,
-    project_description,
+    IF((project_description = '') IS NOT FALSE, project_name, project_description) as project_description,
     date,
     search_engine,
     region_id,

@@ -30,7 +30,7 @@ SELECT
     frequency2_percent, 
     frequency3_percent, 
     potential_traffic, 
-    count_percent potential_traffic_percent
+    potential_traffic_percent
 FROM adapter
 WHERE state = 1
 ORDER BY date DESC, project_id, search_engine;

@@ -11,7 +11,6 @@ SELECT
     project_id,
     project_name,
     project_description, 
-    competitor,
     REGEXP_REPLACE (competitor, '(.*\\.)?(\\w+\\.\\w+)', '\\2') as competitor_new,
     date,
     search_engine,

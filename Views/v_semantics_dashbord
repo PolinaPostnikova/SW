@@ -1,16 +1,16 @@
-DROP VIEW IF EXISTS `seowork-281509.bartiko_views.v_semantics_dashboard`;
+DROP VIEW IF EXISTS `seowork.banki_views.v_semantics_dashboard`;
 
-CREATE VIEW `seowork-281509.bartiko_views.v_semantics_dashboard` AS
+CREATE VIEW `seowork.banki_views.v_semantics_dashboard` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine ORDER BY created_at DESC) as state
-    FROM `seowork.bartiko_source.semantics_dashboard`
+    FROM `seowork.banki_source.semantics_dashboard`
 )
 SELECT
     project_id,
     project_name,
-    project_description,
+    IF((project_description = '') IS NOT FALSE, project_name, project_description) as project_description,
     date,
     search_engine,
     region_id,

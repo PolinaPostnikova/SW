@@ -1,16 +1,16 @@
-DROP VIEW IF EXISTS `seowork.okko_views.v_semantics_category`;
+DROP VIEW IF EXISTS `seowork.banki_views.v_semantics_category`;
 
-CREATE VIEW `seowork.okko_views.v_semantics_category` AS
+CREATE VIEW `seowork.banki_views.v_semantics_category` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine, category_id ORDER BY created_at DESC) as state
-    FROM `seowork.okko_source.semantics_category`
+    FROM `seowork.banki_source.semantics_category`
 )
 SELECT
     project_id,
     project_name,
-    project_description,
+    IF((project_description = '') IS NOT FALSE, project_name, project_description) as project_description,
     date,
     search_engine,
     region_id,

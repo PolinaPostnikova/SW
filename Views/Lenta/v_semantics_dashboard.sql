@@ -6,7 +6,7 @@ WITH adapter AS (
     SELECT *, ROW_NUMBER()
     OVER(PARTITION BY date, project_id, search_engine ORDER BY created_at DESC) as state
     FROM `seowork.lenta_source.semantics_dashboard`
-    WHERE queries_count IS NOT NULL AND frequency2 > 0 AND queries_count > 0 AND frequency2_top10_percent > 1 AND potential_traffic_percent > 1 AND top3_percent > 1 AND top5_percent > 1
+    WHERE queries_count IS NOT NULL AND frequency2 > 0 AND queries_count > 0 AND frequency2_top10_percent > 0 AND potential_traffic_percent > 0 AND top3_percent > 0 AND top5_percent > 0
 ),
 
 delta_adapter AS (

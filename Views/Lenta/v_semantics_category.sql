@@ -12,16 +12,16 @@ WITH adapter AS (
 ),
 delta_adapter AS (
   SELECT *,
-    round(LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top3_percent) as top3_percent_diff,
-    round((LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top3_percent) / top3_percent * 100) as top3_percent_diff_percent,
-    round(LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top5_percent) as top5_percent_diff,
-    round((LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top5_percent) / top5_percent * 100) as top5_percent_diff_percent,
-    round(LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top10_percent) as top10_percent_diff,
-    round((LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top10_percent) / top10_percent * 100) as top10_percent_diff_percent,
-    round(LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - frequency2_top10_percent) as frequency2_top10_percent_diff,
-    round((LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - frequency2_top10_percent) / frequency2_top10_percent * 100) as frequency2_top10_percent_diff_percent,
-    round(LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - potential_traffic_percent) as potential_traffic_percent_diff,
-    round((LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - potential_traffic_percent) / potential_traffic_percent * 100) as potential_traffic_percent_diff_percent 
+    round(top3_percent - LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) as top3_percent_diff,
+    round((top3_percent - LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) / top3_percent * 100) as top3_percent_diff_percent,
+    round(top5_percent - LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) as top5_percent_diff,
+    round((top5_percent - LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) / top5_percent * 100) as top5_percent_diff_percent,
+    round(top10_percent - LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) as top10_percent_diff,
+    round((top10_percent - LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) / top10_percent * 100) as top10_percent_diff_percent,
+    round(frequency2_top10_percent - LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) as frequency2_top10_percent_diff,
+    round((frequency2_top10_percent - LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) / frequency2_top10_percent * 100) as frequency2_top10_percent_diff_percent,
+    round(potential_traffic_percent - LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) as potential_traffic_percent_diff,
+    round((potential_traffic_percent - LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date)) / potential_traffic_percent * 100) as potential_traffic_percent_diff_percent 
   FROM adapter
   WHERE state = 1
 )

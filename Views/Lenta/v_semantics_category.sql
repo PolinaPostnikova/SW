@@ -2,22 +2,26 @@ DROP VIEW IF EXISTS `seowork.lenta_views.v_semantics_category`;
 
 CREATE VIEW `seowork.lenta_views.v_semantics_category` AS
 
+---- защита от деления на 0
+
 WITH adapter AS (
     SELECT *, ROW_NUMBER() OVER(PARTITION BY date, project_id, search_engine, category_id ORDER BY created_at DESC) as state
     FROM `seowork.lenta_source.semantics_category`
-    WHERE queries_count IS NOT NULL
+    WHERE queries_count IS NOT NULL AND frequency2 > 0 AND queries_count > 0 AND frequency2_top10_percent > 1 AND potential_traffic_percent > 1 AND top3_percent > 1 AND top5_percent > 1
+
+--- расчет относительной и абсолютной дельты
 ),
 delta_adapter AS (
   SELECT *,
-    LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top3_percent as top3_percent_diff,
+    round(LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top3_percent) as top3_percent_diff,
     round((LAG(top3_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top3_percent) / top3_percent * 100) as top3_percent_diff_percent,
-    LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top5_percent as top5_percent_diff,
+    round(LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top5_percent) as top5_percent_diff,
     round((LAG(top5_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top5_percent) / top5_percent * 100) as top5_percent_diff_percent,
-    LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top10_percent as top10_percent_diff,
+    round(LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top10_percent) as top10_percent_diff,
     round((LAG(top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - top10_percent) / top10_percent * 100) as top10_percent_diff_percent,
-    LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - frequency2_top10_percent as frequency2_top10_percent_diff,
+    round(LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - frequency2_top10_percent) as frequency2_top10_percent_diff,
     round((LAG(frequency2_top10_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - frequency2_top10_percent) / frequency2_top10_percent * 100) as frequency2_top10_percent_diff_percent,
-    LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - potential_traffic_percent as potential_traffic_percent_diff,
+    round(LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - potential_traffic_percent) as potential_traffic_percent_diff,
     round((LAG(potential_traffic_percent) OVER(PARTITION BY project_id, search_engine, category_id ORDER BY date) - potential_traffic_percent) / potential_traffic_percent * 100) as potential_traffic_percent_diff_percent 
   FROM adapter
   WHERE state = 1

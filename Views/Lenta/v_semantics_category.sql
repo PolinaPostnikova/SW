@@ -2,14 +2,13 @@ DROP VIEW IF EXISTS `seowork.lenta_views.v_semantics_category`;
 
 CREATE VIEW `seowork.lenta_views.v_semantics_category` AS
 
----- защита от деления на 0
-
+--- защита от деления на 0
 WITH adapter AS (
     SELECT *, ROW_NUMBER() OVER(PARTITION BY date, project_id, search_engine, category_id ORDER BY created_at DESC) as state
     FROM `seowork.lenta_source.semantics_category`
-    WHERE queries_count IS NOT NULL AND frequency2 > 0 AND queries_count > 0 AND frequency2_top10_percent > 1 AND potential_traffic_percent > 1 AND top3_percent > 1 AND top5_percent > 1
-
---- расчет относительной и абсолютной дельты
+    WHERE queries_count IS NOT NULL AND frequency2 > 0 AND queries_count > 0 AND frequency2_top10_percent > 0 AND potential_traffic_percent > 0 AND top3_percent > 0 AND top5_percent > 0
+    
+--- расчет дельты
 ),
 delta_adapter AS (
   SELECT *,

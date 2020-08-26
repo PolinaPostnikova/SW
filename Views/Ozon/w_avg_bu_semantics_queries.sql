@@ -1,6 +1,6 @@
-DROP VIEW IF EXISTS `seowork.ozon_views.w_avg_bu_semantics_qieries`;
+DROP VIEW IF EXISTS `seowork.ozon_views.w_avg_bu_semantics_queries`;
 
-CREATE VIEW `seowork.ozon_views.w_avg_bu_semantics_qieries` AS
+CREATE VIEW `seowork.ozon_views.w_avg_bu_semantics_queries` AS
 -- адаптер исходных данных, и защита от деления на 0
 WITH adapter AS (
     SELECT sd.project_id, project_name, bu_id, bu_name, search_engine, date,

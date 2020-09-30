@@ -1,8 +1,22 @@
 SELECT
 
 *,
-frequency2 / frequency2_top30_count AS frequency2_top30_percent,
-frequency2 / frequency2_top50_count AS frequency2_top50_percent
+ROUND(frequency2_top10_30_ratio / queries_count, 2) AS queries_top10_30_ratio
+
+FROM
+
+(SELECT
+
+*,
+ROUND((LOG10(frequency2_top30_count/(frequency2_top10_count+1))*10),2) AS frequency2_top10_30_ratio
+
+FROM
+
+(SELECT
+
+*,
+ROUND(frequency2 / frequency2_top30_count * 100, 2) AS frequency2_top30_percent,
+ROUND(frequency2 / frequency2_top50_count * 100, 2) AS frequency2_top50_percent
 
 
 FROM
@@ -65,5 +79,7 @@ GROUP BY document_id, search_engine, date) AS q
 
 LEFT JOIN `seowork.ozon_views.v_semantics_documents` AS d USING(document_id, date, search_engine)
 WHERE d.frequency2 > 0 AND frequency2_top30_count > 0 AND frequency2_top50_count > 0)
+
+WHERE frequency2_top10_count > 0))
 LIMIT 1000
 

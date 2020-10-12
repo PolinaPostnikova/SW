@@ -4,7 +4,7 @@ CREATE VIEW `seowork.iledebeaute_views.v_traffic_segments_google_analytics` AS
 
 WITH adapter AS (
     SELECT *, ROW_NUMBER()
-    OVER(PARTITION BY date, project_id, segment_id, source_id, host_id ORDER BY uploaded_at DESC) as state
+    OVER(PARTITION BY date, project_id, segment_id, device_category, source_id, host_id ORDER BY uploaded_at DESC) as state
     FROM `seowork.iledebeaute_source.traffic_segments_google_analytics`
 )
 SELECT
@@ -29,4 +29,4 @@ SELECT
     uploaded_at
 FROM adapter
 WHERE state = 1
-ORDER BY date DESC, project_id, segment_id;
+ORDER BY date DESC, project_id, segment_id; 

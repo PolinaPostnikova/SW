@@ -1,0 +1,44 @@
+DROP VIEW IF EXISTS `seowork.domclick_views.v_avg_competitors_dashboard`;
+
+CREATE VIEW `seowork.domclick_views.v_avg_competitors_dashboard` AS
+
+WITH distinct_project AS (
+    SELECT project_id, project_name, date, search_engine
+    FROM `seowork.domclick_views.v_competitors_dashboard`
+    group by project_id, project_name, date, search_engine
+),
+
+favorite_competitors AS(
+    SELECT distinct competitor_new 
+    FROM `seowork.domclick_views.v_competitors_dashboard`
+    where competitor_new in ("gdeetotdom.ru", 'onrealt.ru', 'sob.ru', 'avaho.ru', 
+    'multilisting.su', 'm2.ru', 'cian.ru', 'avito.ru', 'move.ru', 'domofond.ru', 'domclick.ru')
+),
+
+all_pr_com as (
+SELECT * FROM 
+distinct_project CROSS JOIN favorite_competitors
+ORDER BY project_id),
+
+vs_dashboard as (
+    select all_pr_com.*, 
+    COALESCE(cd.count,0) top10_count, 
+    COALESCE(cd.frequency2,0) frequency2_top10, 
+    COALESCE(cd.potential_traffic,0) potential_traffic_top10,
+    sd.queries_count, sd.frequency2
+    from all_pr_com LEFT JOIN  
+    `seowork.domclick_views.v_competitors_dashboard` cd 
+    using (project_id, date, search_engine, competitor_new) 
+    JOIN `seowork.domclick_views.v_semantics_dashboard` sd
+    ON cd.project_id = sd.project_id
+
+)
+
+SELECT competitor_new competitor, search_engine, date,
+    ROUND(  100 *  sum(top10_count) / sum(queries_count), 2) as avg_top10_prc,
+    ROUND(  100 * sum(frequency2_top10) / sum(frequency2), 2) as avg_ws2_top10_prc,
+    ROUND( 1000 * sum(potential_traffic_top10) / sum(frequency2) , 2) as avg_p_traf_top10_prc,
+FROM vs_dashboard
+WHERE queries_count>0 and frequency2>0
+GROUP BY date, search_engine, competitor
+ORDER BY competitor, date desc
